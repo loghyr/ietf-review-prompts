@@ -10,6 +10,19 @@ cd ietf/scripts
 ./claude-setup.sh
 ```
 
+## Updating
+
+Pull the latest changes and rerun the setup script:
+
+```bash
+git pull
+cd ietf/scripts
+./claude-setup.sh
+```
+
+The script overwrites the installed skill and slash commands with fresh
+copies from the repo.  No uninstall step is needed — just rerun it.
+
 ## Available Commands
 
 | Command | Purpose |
