@@ -1,18 +1,67 @@
 # idnits Submission Checks
 
 The IETF datatracker runs `idnits` on every submitted draft.  Errors
-block submission; warnings and comments appear in the review.  This
-pattern file checks the markdown source for conditions that produce
-idnits findings in the rendered text output.
+block submission; warnings and comments appear in the review.
 
-## What idnits checks
+## Automated Check: Run idnits Locally
 
-idnits validates the rendered plain-text output (`.txt`), not the
-markdown source.  However, most idnits findings trace back to specific
-patterns in the source.  The reviewer should flag source-level patterns
-that are known to produce idnits findings.
+Before doing source-level analysis, attempt to run idnits via the
+project's build system.  This gives authoritative results against the
+rendered output rather than heuristic guesses from the source.
 
-## Checks
+### Detection
+
+Look for Martin Thomson's i-d-template:
+
+1. Check if `Makefile` exists in the draft directory
+2. Check if it includes `lib/main.mk` (the i-d-template pattern)
+3. If `lib/` does not exist, check for `.gitmodules` referencing
+   `i-d-template` — if found, run `git submodule update --init`
+
+Other Makefile patterns (e.g., standalone xml2rfc Makefiles) may also
+have an `idnits` target.  Check with `grep -q idnits Makefile`.
+
+### Execution
+
+If an i-d-template Makefile is detected:
+
+```bash
+# Build the text output and run idnits
+make idnits 2>&1
+```
+
+If `make idnits` succeeds, parse its output for errors (`**`), flaws
+(`~~`), warnings (`==`), and comments (`--`).  Report each as an
+IDNITS finding with the severity level.
+
+If `make idnits` fails (missing dependencies, npm not installed, etc.),
+fall back to source-level analysis (the checks below).
+
+### Lint checks
+
+i-d-template also provides:
+
+```bash
+make lint 2>&1
+```
+
+This checks whitespace, docname consistency, and default branch naming.
+Run it if available and report findings.
+
+### When tools are not available
+
+If the Makefile is absent or the build fails, fall back to the
+source-level heuristic checks below.  Prefix findings with
+"(source-level heuristic)" to distinguish them from authoritative
+idnits output.
+
+---
+
+## Source-Level Heuristic Checks (fallback)
+
+These checks analyze the markdown source for patterns that are known
+to produce idnits findings in the rendered output.  They are less
+accurate than running idnits directly.
 
 ### CHECK 1: Non-ASCII characters
 

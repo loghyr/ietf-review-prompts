@@ -183,16 +183,36 @@ EDIT-N: <location> — <issue>
 
 Load `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/idnits.md` and apply all checks.
 
-The IETF datatracker runs `idnits` on every submitted draft.  These
-checks catch source-level patterns that produce idnits errors or
-warnings in the rendered output.
+The IETF datatracker runs `idnits` on every submitted draft.
 
-Focus on:
+### Step 1: Attempt automated run
+
+Check for Martin Thomson's i-d-template (`Makefile` that includes
+`lib/main.mk`) or any Makefile with an `idnits` target.  If found:
+
+```bash
+make idnits 2>&1
+```
+
+If this succeeds, parse the output directly.  Report errors (`**`) and
+flaws (`~~`) as IDNITS findings.  Warnings (`==`) and comments (`--`)
+are informational — include them but mark severity accordingly.
+
+Also try `make lint` if available.
+
+### Step 2: Source-level fallback
+
+If no Makefile is found, or `make idnits` fails (missing tools), apply
+the source-level heuristic checks from the pattern file:
+
 1. Non-ASCII characters in the source (curly quotes, em dashes, etc.)
 2. Lines inside code blocks, XDR fragments, ASCII art, and tables that
    exceed 69 characters (xml2rfc adds a 3-character indent)
 3. Missing front matter fields (`ipr:`, `docname:`, `category:`)
 4. Abstract length
+
+Prefix heuristic findings with "(source-level)" to distinguish them
+from authoritative idnits output.
 
 Output each finding as:
 ```
