@@ -92,3 +92,30 @@ FP-17: Long lines in externally generated content.
   If a table or figure is machine-generated and the source is not
   directly editable (e.g., an included YANG module), note the issue
   but do not flag it as blocking.
+
+FP-18: TEXT_DOC_REF warnings for array indices in ASCII art.
+  The datatracker validator flags `[0]`, `[1]`, etc. inside artwork
+  blocks as text-document references (e.g., "[1] looks like a
+  citation").  In NFS and other protocol specs, these are array
+  indices in protocol diagrams (e.g., `cwr_owners[0]`,
+  `ffl_mirrors[1]`).  These are false positives and cannot be
+  fixed without removing standard array notation from diagrams.
+
+FP-19: INVALID_REFERENCES_NAME for nested references wrapper.
+  kramdown-rfc generates a `<references><name>References</name>`
+  outer wrapper around the Normative and Informative subsections.
+  This is correct per RFC 7991 (xml2rfc v3 vocabulary), but the
+  datatracker validator flags it because it expects every
+  `<references>` name to be "Normative" or "Informative".  This
+  is a tool-chain issue, not a draft error.
+
+FP-20: LINE_PI warnings for processing instruction tags.
+  kramdown-rfc inserts `<?line NNN?>` processing instructions for
+  source line tracking.  The validator flags these but they are
+  tool-generated and not controllable from the markdown source.
+
+FP-21: MISSING_DOC_DATE when using i-d-template placeholder.
+  Drafts using Martin Thomson's i-d-template often have
+  `date: {DATE}` in the YAML front matter.  The Makefile replaces
+  this placeholder at build time.  The validator flags it during
+  local builds but submission tooling handles it correctly.
