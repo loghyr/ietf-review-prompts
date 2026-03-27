@@ -39,4 +39,11 @@ SECURITY
 [ ] New error codes discussed for information leakage if applicable
 [ ] CRC/checksum not described as providing security (integrity ≠ security)
 
+IDNITS (submission readiness)
+[ ] No non-ASCII characters outside author names (no curly quotes, em dashes)
+[ ] No lines > 69 chars inside code blocks, XDR, ASCII art, or tables
+[ ] Front matter has ipr:, docname: (with -NN suffix), category:
+[ ] Abstract is under ~15 lines of 72-char text
+[ ] BCP 14 boilerplate present if key words are used
+
 Output a summary line: READY / NOT READY, with a count of failed items.

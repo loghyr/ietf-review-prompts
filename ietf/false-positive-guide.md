@@ -80,3 +80,15 @@ FP-14: `<cref>` notes marked with a specific author and a clear action item.
 FP-15: Terminology variation within a definitions section.
   A definitions section that defines multiple related terms using
   those terms is not inconsistent — it is defining them.
+
+## idnits False Positives
+
+FP-16: Non-ASCII characters in author names or reference titles.
+  Author names with diacritics (e.g., "M\u00FCller") are correct and
+  acceptable.  idnits flags them but they should not be changed.
+  Only flag non-ASCII in prose text, code blocks, or comments.
+
+FP-17: Long lines in externally generated content.
+  If a table or figure is machine-generated and the source is not
+  directly editable (e.g., an included YANG module), note the issue
+  but do not flag it as blocking.

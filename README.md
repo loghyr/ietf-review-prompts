@@ -29,6 +29,7 @@ Each check has a dedicated pattern file:
 - `patterns/xdr.md` — XDR consistency and extractability rules
 - `patterns/iana.md` — IANA considerations completeness rules
 - `patterns/security.md` — Security considerations coverage rules
+- `patterns/idnits.md` — Submission nits (line length, non-ASCII, boilerplate)
 
 ## Structure
 
@@ -48,7 +49,8 @@ ietf-review-prompts/
     │   ├── rfc2119.md
     │   ├── xdr.md
     │   ├── iana.md
-    │   └── security.md
+    │   ├── security.md
+    │   └── idnits.md
     └── scripts/
         └── claude-setup.sh
 ```

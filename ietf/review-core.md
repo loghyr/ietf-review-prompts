@@ -21,6 +21,9 @@ ambiguous, inconsistent, or incomplete.
 - If the draft contains XDR (look for `~~~ xdr` or `/// ` lines):
   load `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/xdr.md`
 
+### Always Load (submission readiness)
+4. `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/idnits.md` — submission nits
+
 ---
 
 ## TASK 0: Identify the Draft
@@ -176,7 +179,29 @@ EDIT-N: <location> — <issue>
 
 ---
 
-## TASK 8: False Positive Check
+## TASK 8: Submission Nits (idnits)
+
+Load `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/idnits.md` and apply all checks.
+
+The IETF datatracker runs `idnits` on every submitted draft.  These
+checks catch source-level patterns that produce idnits errors or
+warnings in the rendered output.
+
+Focus on:
+1. Non-ASCII characters in the source (curly quotes, em dashes, etc.)
+2. Lines inside code blocks, XDR fragments, ASCII art, and tables that
+   exceed 69 characters (xml2rfc adds a 3-character indent)
+3. Missing front matter fields (`ipr:`, `docname:`, `category:`)
+4. Abstract length
+
+Output each finding as:
+```
+IDNITS-N: <location> — <issue>
+```
+
+---
+
+## TASK 9: False Positive Check
 
 Load `{{IETF_REVIEW_PROMPTS_DIR}}/false-positive-guide.md`.
 
@@ -185,7 +210,7 @@ Remove eliminated findings from the report.
 
 ---
 
-## TASK 9: Report
+## TASK 10: Report
 
 Load `{{IETF_REVIEW_PROMPTS_DIR}}/inline-template.md`.
 
@@ -210,4 +235,5 @@ TOTAL FINDINGS: <number>
   IANA:       <n>
   SEC:        <n>
   EDITORIAL:  <n>
+  IDNITS:     <n>
 ```
