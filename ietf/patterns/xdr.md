@@ -23,15 +23,32 @@ For NFSv4 extension drafts:
 - New types MUST end with `4` (e.g., `my_new_type4`, `MY_CONST4`).
 - Enum values use ALL_CAPS with the type prefix
   (e.g., `MY_TYPE_VALUE_ONE` for `enum my_type4`).
-- Struct field names use a short prefix derived from the struct name
-  (e.g., fields in `MY_OP4args` use `moa_` prefix).
+
+### Field Prefix Convention
+
+Procedure names are words separated by `_` (e.g., `EXCHANGE_RANGE`,
+`COPY_NOTIFY`).  Struct field names are derived from the procedure
+name as follows:
+
+- **Arguments** (`OP_NAME4args`): take the first letter of each word
+  in `OP_NAME`, lower-cased, and append `a_`.
+  Example: `EXCHANGE_RANGE` -- words E, R -- prefix `era_`
+  Fields: `era_src_stateid`, `era_dst_offset`, `era_count`
+
+- **Responses** (`OP_NAME4res` / `OP_NAME4resok`): same first letters,
+  append `r_`.
+  Example: `EXCHANGE_RANGE` -- words E, R -- prefix `err_`
+  Fields: `err_status`, `err_resok4`
+
+Prefix collisions between different operations are expected and are
+NOT a finding.  For example, `EXTRA_REVIEW` would also yield `era_`
+and `err_` -- this is by design and is not an error.
 
 Check:
 - All fields within a struct share the same prefix.
-- The prefix is consistent with the struct name (not borrowed from
-  a different struct).
-- No two structs use the same field prefix (causes confusion and
-  potential merge conflicts with base XDR).
+- The args prefix ends with `a_`; the response prefix ends with `r_`.
+- The prefix letters match the initial letters of the procedure name
+  words (case-insensitive).
 
 ## Operation Completeness
 

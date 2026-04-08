@@ -1,15 +1,33 @@
 # IANA Considerations Patterns
 
+## NFSv4 Operation Numbers
+
+NFSv4 operation numbers do NOT require an explicit IANA registration
+entry.  An operation is "approved" by virtue of appearing in a
+standards-track document.  The operation number assigned in the draft
+body (e.g., "Operation 81: EXCHANGE_RANGE") is sufficient; no
+registration table in IANA Considerations is needed for the op number
+itself.  Do NOT flag a missing IANA entry for an operation number as an
+error.
+
+This applies to: new OP_* constants, operation section titles of the
+form "Operation N: NAME", and corresponding OP_NAME entries in the
+opnum enum.
+
+Other values (error codes, layout types, flag bits, attribute numbers,
+new registries) still require explicit IANA registration entries -- see
+below.
+
 ## Completeness Check
 
-For every new constant, type, operation number, error code, or registry
-introduced anywhere in the draft body, verify that the IANA Considerations
-section contains a corresponding registration request.
+For every new constant, type, error code, or registry introduced
+anywhere in the draft body (excluding operation numbers -- see above),
+verify that the IANA Considerations section contains a corresponding
+registration request.
 
 Common places to look for new values that need IANA registration:
 - Enum definitions in XDR (new enum values added to an existing registry)
 - New error codes (e.g., NFS4ERR_* values)
-- New operation numbers
 - New layout type numbers
 - New flag bit assignments
 - New attribute numbers
@@ -57,6 +75,9 @@ Track, 0x0100-0x0FFF for Experimental), verify:
 IANA-PAT-1: New XDR constant defined but not registered.
   Every new enum value or constant that extends an existing IANA registry
   must have an entry in IANA Considerations.
+  Exception: NFSv4 operation numbers (OP_NAME constants and operation
+  section titles) are approved by the standards-track document itself
+  and do not require a separate registration entry.
 
 IANA-PAT-2: Registry table column count does not match existing registry.
   Check the actual IANA registry page for the column format.
