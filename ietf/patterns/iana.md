@@ -18,20 +18,74 @@ Other values (error codes, layout types, flag bits, attribute numbers,
 new registries) still require explicit IANA registration entries -- see
 below.
 
-## Completeness Check
+## When IANA Action Is Actually Required
 
-For every new constant, type, error code, or registry introduced
-anywhere in the draft body (excluding operation numbers -- see above),
-verify that the IANA Considerations section contains a corresponding
-registration request.
+**Default assumption: no IANA action is required.**  A new constant,
+enum value, flag bit, error code, or attribute number in an
+Internet-Draft only needs an IANA Considerations entry when one of
+the following is true:
 
-Common places to look for new values that need IANA registration:
-- Enum definitions in XDR (new enum values added to an existing registry)
-- New error codes (e.g., NFS4ERR_* values)
-- New layout type numbers
-- New flag bit assignments
-- New attribute numbers
-- New encoding type registries introduced by the draft itself
+1. **The value extends a registry that already exists in a
+   published RFC.**  The reviewer must cite the specific published
+   RFC that established the registry.  "Probably there's a
+   registry for X" is not sufficient -- find it or assume there
+   isn't one.
+
+2. **The draft itself creates a new registry** and populates it
+   with initial values.  In that case the New Registry Creation
+   rules below apply.
+
+If neither is true, do not flag a missing IANA entry as a finding.
+Standards-track NFSv4 documents routinely define new OP_* numbers,
+NFS4ERR_* codes, EXCHGID4_FLAG_* bits, FATTR4_* attribute numbers,
+flag bits on new bitmaps defined by the same draft, and per-draft
+enum types without IANA entries, because no IANA registry governs
+them -- the standards-track document itself is the authoritative
+record.  Flagging these as missing IANA registrations creates noise
+and pushes back on authors to add registrations that IANA does not
+want and will not process.
+
+When in doubt, search for the registry on
+<https://www.iana.org/protocols> before raising a finding.  If the
+search comes up empty, the default assumption stands and there is
+no finding to raise.
+
+### Cases that DO require an IANA entry
+
+These are the cases where an IANA registry exists in a published
+RFC and is extensible by later documents:
+
+- **pNFS Layout Types Registry** (RFC 8881 S22.4): new
+  `LAYOUT4_*` type numbers extend this registry and require an
+  entry.
+- **NFSv4 Recallable Object Types Registry** (RFC 8881 S22.3):
+  new `RCA4_TYPE_MASK_*` values extend this registry.
+- **Other registries explicitly created by RFC 8881 or a peer
+  NFSv4 RFC**: check RFC 8881 S22 (IANA Considerations) for the
+  full list -- it is the canonical starting point for NFSv4
+  drafts.
+- **Registries created by non-NFSv4 base documents** the draft
+  depends on (e.g., DNS, HTTP, TLS): check the base document's
+  IANA section.
+
+For all other newly-introduced wire values (error codes,
+attribute numbers, flag bits, op numbers, enum values of
+draft-defined types), the standards-track document is the
+record.  No IANA action is needed or appropriate.
+
+### Examples (from real drafts)
+
+| Introduced by a draft | IANA action? | Why |
+|-----------------------|--------------|-----|
+| New `OP_FOO = 87` | No | Op numbers are governed by the publishing document, not a registry |
+| New `NFS4ERR_FOO = 10097` | No | nfsstat4 codes are governed by the publishing document |
+| New `FATTR4_FOO = 89` | No | Per-draft attribute numbers are governed by the publishing document |
+| New `EXCHGID4_FLAG_USE_FOO = 0x00100000` | No | EXCHGID flags are governed by the publishing document |
+| New `LAYOUT4_FOO = 5` | **Yes** | pNFS Layout Types Registry exists in RFC 8881 S22.4 |
+| New `RCA4_TYPE_MASK_FOO = 20` | **Yes** | NFSv4 Recallable Object Types Registry exists in RFC 8881 S22.3 |
+| New flag bit in a bitmap defined by THIS draft | No | The draft owns the bit space it introduces |
+| New flag bit in a bitmap defined by a prior RFC that has an IANA registry | **Yes** | Extends a published registry |
+| New registry created by THIS draft with initial values | **Yes** | New Registry Creation rules apply |
 
 ## Registry Format
 
@@ -73,8 +127,13 @@ Track, 0x0100-0x0FFF for Experimental), verify:
 ## Common IANA Mistakes
 
 IANA-PAT-1: New XDR constant defined but not registered.
-  Every new enum value or constant that extends an existing IANA registry
-  must have an entry in IANA Considerations.
+  Applies ONLY when the new enum value or constant extends a
+  registry that already exists in a published RFC (the reviewer
+  must cite the RFC and registry name), OR when the draft itself
+  creates a new registry.  If neither is true, the publishing
+  document is itself the authoritative record and no IANA entry
+  is required -- do not raise a finding.  See "When IANA Action
+  Is Actually Required" at the top of this file.
   Exception: NFSv4 operation numbers (OP_NAME constants and operation
   section titles) are approved by the standards-track document itself
   and do not require a separate registration entry.

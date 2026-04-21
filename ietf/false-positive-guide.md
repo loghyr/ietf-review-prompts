@@ -62,6 +62,19 @@ FP-12: Informative IANA discussion in Security Considerations.
   Cross-referencing the IANA section from Security Considerations is
   normal.  Do not flag it as a duplicate registration.
 
+FP-22: Missing IANA registration for a value whose registry
+  does not exist.
+  Default assumption: an Internet-Draft does NOT require an IANA
+  Considerations entry for a newly-introduced error code, attribute
+  number, flag bit, op number, or draft-local enum value unless the
+  reviewer can cite (a) an existing IANA registry in a published RFC
+  that the value extends, or (b) a new registry the draft itself
+  creates.  The standards-track document is itself the authoritative
+  record for everything else.  See `patterns/iana.md` "When IANA
+  Action Is Actually Required" for the rule and the examples table.
+  Do NOT raise "this value needs IANA registration" unless the
+  registry can be pointed to.
+
 ## Security False Positives
 
 FP-13: Security Considerations that reference a parent document.
