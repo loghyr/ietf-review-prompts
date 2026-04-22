@@ -20,6 +20,13 @@ ambiguous, inconsistent, or incomplete.
 ### Conditional Files
 - If the draft contains XDR (look for `~~~ xdr` or `/// ` lines):
   load `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/xdr.md`
+- If the draft cites any Informational or Experimental RFC normatively
+  (check the Normative References block), or if asked to review a
+  shepherd writeup:
+  load `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/downref.md`
+- If the task involves a WGLC review, adoption call assessment, or
+  shepherd writeup evaluation:
+  load `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/wg-process.md`
 
 ### Always Load (submission readiness)
 4. `{{IETF_REVIEW_PROMPTS_DIR}}/patterns/idnits.md` — submission nits
@@ -60,6 +67,20 @@ Check that the following sections are present and non-empty:
 
 Flag any section that is present but contains only a placeholder or
 editorial note (`<cref>`, "TODO", "TBD", "to be written", etc.).
+
+**Sibling draft check (SIBLING-1):** If this draft is one of a pair
+or series that was developed from common source text (e.g.,
+uncacheable-files and uncacheable-directories, or two companion
+protocol extensions), scan the Introduction, Definitions, and any
+attributes/operations sections for:
+- Attribute or field names that belong to the sibling draft, not this one
+- Scope statements that describe the sibling's mechanism rather than
+  this document's mechanism
+- "applies to" or "per-object-type" language copied verbatim from the
+  sibling that is incorrect for this document's object type
+
+Flag these as STRUCTURE-N with the note "possible copy-paste from
+sibling draft; verify against the correct document's object type."
 
 Output each finding as:
 ```

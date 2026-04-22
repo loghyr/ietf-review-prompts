@@ -132,3 +132,19 @@ FP-21: MISSING_DOC_DATE when using i-d-template placeholder.
   `date: {DATE}` in the YAML front matter.  The Makefile replaces
   this placeholder at build time.  The validator flags it during
   local builds but submission tooling handles it correctly.
+
+## Downref False Positives
+
+FP-23: Conditional MUST over an informative reference.
+  A MUST clause of the form "If a client implements X ({{RFC-YYYY}}),
+  then the client MUST do Y" does NOT create a normative dependency on
+  RFC-YYYY, provided RFC-YYYY appears in the Informative References
+  block.  The MUST governs the client's own behavior when it has
+  chosen to implement X -- it does not mandate that the client
+  implement X in the first place.  Moving RFC-YYYY from Normative to
+  Informative resolves the downref concern.  Do NOT re-flag this
+  pattern as a downref after the move has been made.
+  Exception: if the prose requires the reader to implement RFC-YYYY
+  in order to comply with any MUST in this document, the dependency
+  is normative and the reference must stay normative (or the downref
+  must be registered per RFC 3967).
